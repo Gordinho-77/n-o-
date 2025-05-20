@@ -46,6 +46,7 @@
             overflow-x: hidden;
             overflow-y: auto;
             padding: 20px 0;
+            margin: 0;
         }
 
         body::before {
@@ -53,18 +54,19 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
             background: 
-                radial-gradient(circle at 0% 0%, 
-                    var(--cor-verde-claro) 0%,
-                    transparent 50%),
-                radial-gradient(circle at 100% 100%, 
-                    var(--cor-violeta-claro) 0%,
-                    transparent 50%);
-            opacity: 0.3;
-            animation: fundo-pulsar 10s ease-in-out infinite;
+                linear-gradient(45deg,
+                    rgba(138, 43, 226, 0.3) 0%,
+                    rgba(0, 255, 127, 0.3) 50%,
+                    rgba(138, 43, 226, 0.3) 100%);
+            filter: blur(80px);
+            animation: gradiente-mover 15s ease infinite;
             z-index: 0;
+            transform-origin: center;
         }
 
         body::after {
@@ -72,38 +74,57 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
             background: 
-                linear-gradient(45deg,
-                    var(--cor-violeta-escuro) 0%,
-                    var(--cor-verde-escuro) 50%,
-                    var(--cor-violeta-muito-escuro) 100%);
-            opacity: 0.7;
+                linear-gradient(135deg,
+                    rgba(75, 0, 130, 0.95) 0%,
+                    rgba(46, 8, 84, 0.98) 100%);
             z-index: -1;
-            animation: fundo-gradiente 15s ease infinite;
         }
 
-        @keyframes fundo-pulsar {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.4;
-            }
-        }
-
-        @keyframes fundo-gradiente {
+        @keyframes gradiente-mover {
             0% {
                 background-position: 0% 50%;
+                transform: scale(1);
             }
             50% {
                 background-position: 100% 50%;
+                transform: scale(1.2);
             }
             100% {
                 background-position: 0% 50%;
+                transform: scale(1);
+            }
+        }
+
+        /* Efeito de luz suave */
+        .luz {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: 
+                radial-gradient(circle at 20% 20%,
+                    rgba(138, 43, 226, 0.1) 0%,
+                    transparent 50%),
+                radial-gradient(circle at 80% 80%,
+                    rgba(0, 255, 127, 0.1) 0%,
+                    transparent 50%);
+            animation: luz-mover 15s ease-in-out infinite;
+        }
+
+        @keyframes luz-mover {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
             }
         }
 
@@ -329,35 +350,39 @@
         }
 
         /* Estilos das partículas */
-        .particula {
+        .particulas {
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 0;
-            background: radial-gradient(circle at center,
-                rgba(138, 43, 226, 1) 0%,
-                rgba(147, 112, 219, 0.8) 40%,
-                rgba(75, 0, 130, 0.6) 70%,
-                transparent 100%);
+            z-index: 1;
+        }
+
+        .particula {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            animation: flutuar linear infinite;
-            box-shadow: 0 0 15px rgba(138, 43, 226, 0.8),
-                       0 0 30px rgba(138, 43, 226, 0.6),
-                       0 0 50px rgba(138, 43, 226, 0.4);
+            animation: flutuar 20s linear infinite;
+            opacity: 0;
         }
 
         @keyframes flutuar {
             0% {
-                transform: translateY(0) translateX(0vw) scale(1) rotate(0deg);
+                transform: translateY(0) translateX(0);
                 opacity: 0;
             }
             10% {
-                opacity: 1;
+                opacity: 0.3;
             }
             90% {
-                opacity: 1;
+                opacity: 0.3;
             }
             100% {
-                transform: translateY(-100vh) translateX(calc(var(--random-x, 0) * 1vw)) scale(0) rotate(calc(var(--random-rotation, 0) * 1deg));
+                transform: translateY(-100vh) translateX(100px);
                 opacity: 0;
             }
         }
@@ -377,22 +402,70 @@
             margin: 0 auto;
         }
 
-        .carrossel-container::before {
-            content: '';
+        /* Estilos das setas de navegação */
+        .seta-navegacao {
             position: absolute;
-            inset: 0;
-            background: 
-                linear-gradient(120deg, transparent 0%, rgba(138, 43, 226, 0.1) 50%, transparent 100%),
-                linear-gradient(60deg, transparent 0%, rgba(147, 112, 219, 0.1) 50%, transparent 100%);
-            animation: brilho 8s ease-in-out infinite;
-            z-index: -1;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(138, 43, 226, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .seta-navegacao:hover {
+            background: rgba(138, 43, 226, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .seta-navegacao::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-top: 2px solid white;
+            border-right: 2px solid white;
+            position: absolute;
+        }
+
+        .seta-anterior {
+            left: 10px;
+        }
+
+        .seta-anterior::before {
+            transform: rotate(-135deg);
+            margin-left: 4px;
+        }
+
+        .seta-proximo {
+            right: 10px;
+        }
+
+        .seta-proximo::before {
+            transform: rotate(45deg);
+            margin-right: 4px;
+        }
+
+        .seta-navegacao.desabilitada {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .carrossel {
             display: flex;
             width: 800%;
             height: 100%;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s ease-in-out;
+            will-change: transform;
         }
 
         .slide {
@@ -422,6 +495,7 @@
             display: block;
             transition: transform 0.5s ease;
             filter: brightness(0.95);
+            pointer-events: none;
         }
 
         .slide:hover img {
@@ -543,6 +617,16 @@
                 letter-spacing: 0.5px;
                 padding: 10px 5px;
             }
+
+            .seta-navegacao {
+                width: 35px;
+                height: 35px;
+            }
+
+            .seta-navegacao::before {
+                width: 10px;
+                height: 10px;
+            }
         }
 
         @media screen and (min-width: 1200px) {
@@ -659,20 +743,62 @@
             transform: scale(1.05);
             filter: brightness(1);
         }
+
+        /* Efeito de brilho flutuante */
+        .brilho {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            background: 
+                radial-gradient(circle at 30% 30%,
+                    rgba(138, 43, 226, 0.15) 0%,
+                    transparent 70%),
+                radial-gradient(circle at 70% 70%,
+                    rgba(0, 255, 127, 0.15) 0%,
+                    transparent 70%);
+            animation: brilho-mover 20s ease-in-out infinite;
+        }
+
+        @keyframes brilho-mover {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translate(0, 0);
+            }
+            25% {
+                opacity: 0.7;
+                transform: translate(2%, 2%);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translate(0, 0);
+            }
+            75% {
+                opacity: 0.7;
+                transform: translate(-2%, -2%);
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="brilho"></div>
+    <div class="particulas" id="particulas"></div>
     <div class="container">
         <h1 class="titulo">
             <div class="linha-titulo">
-                <span>P</span>
-                <span>a</span>
-                <span>r</span>
-                <span>a</span>
+            <span>P</span>
+            <span>a</span>
+            <span>r</span>
+            <span>a</span>
                 <span class="espaco">&nbsp;</span>
                 <span>S</span>
                 <span>e</span>
-                <span>m</span>
+            <span>m</span>
                 <span>p</span>
                 <span>r</span>
                 <span>e</span>
@@ -687,10 +813,13 @@
                 <span class="palavra">i</span>
                 <span class="palavra">g</span>
                 <span class="palavra">o</span>
-                <span>!</span>
+            <span>!</span>
             </div>
         </h1>
         <div class="carrossel-container">
+            <div class="seta-navegacao seta-anterior" id="setaAnterior">
+                <span class="seta"></span>
+            </div>
             <div class="carrossel">
                 <div class="slide">
                     <img src="foto1.jpg" alt="Foto 1">
@@ -716,6 +845,9 @@
                 <div class="slide">
                     <img src="foto8.jpg" alt="Foto 8">
                 </div>
+            </div>
+            <div class="seta-navegacao seta-proximo" id="setaProximo">
+                <span class="seta"></span>
             </div>
             <div class="carrossel-botoes">
                 <button class="carrossel-botao ativo"></button>
@@ -748,64 +880,62 @@
         const botoes = document.querySelectorAll('.carrossel-botao');
         let slideAtual = 0;
         const totalSlides = botoes.length;
-        let startX, moveX;
+        let startX = null;
+        let moveX = null;
         let isDragging = false;
-        let intervaloAutomatico = null;
-        let carrosselAutomaticoAtivo = true;
-        let touchStartX = 0;
-        let touchEndX = 0;
 
         function atualizarCarrossel() {
-            carrossel.style.transform = `translateX(-${slideAtual * 12.5}%)`;
+            const offset = slideAtual * 12.5;
+            carrossel.style.transition = 'transform 0.5s ease-in-out';
+            carrossel.style.transform = `translateX(-${offset}%)`;
             botoes.forEach((botao, index) => {
                 botao.classList.toggle('ativo', index === slideAtual);
             });
         }
 
         function proximoSlide() {
-            if (!carrosselAutomaticoAtivo) return;
-            slideAtual = (slideAtual + 1) % totalSlides;
+            if (slideAtual < totalSlides - 1) {
+                slideAtual++;
             atualizarCarrossel();
+            }
         }
 
         function slideAnterior() {
-            slideAtual = (slideAtual - 1 + totalSlides) % totalSlides;
+            if (slideAtual > 0) {
+                slideAtual--;
             atualizarCarrossel();
-        }
-
-        function iniciarCarrosselAutomatico() {
-            if (!carrosselAutomaticoAtivo) return;
-            if (intervaloAutomatico) clearInterval(intervaloAutomatico);
-            intervaloAutomatico = setInterval(proximoSlide, 5000);
-        }
-
-        function pararCarrosselAutomatico() {
-            carrosselAutomaticoAtivo = false;
-            if (intervaloAutomatico) {
-                clearInterval(intervaloAutomatico);
-                intervaloAutomatico = null;
             }
         }
 
         // Eventos de toque para dispositivos móveis
         carrossel.addEventListener('touchstart', (e) => {
+            e.preventDefault();
             touchStartX = e.touches[0].clientX;
             carrossel.style.transition = 'none';
-            pararCarrosselAutomatico();
-        }, { passive: true });
+        });
 
         carrossel.addEventListener('touchmove', (e) => {
-            touchEndX = e.touches[0].clientX;
+            e.preventDefault();
+            if (!touchStartX) return;
+            
+            const touchEndX = e.touches[0].clientX;
             const diff = touchEndX - touchStartX;
             const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
+            
+            // Limita o deslizamento
+            if (offset > 0 || offset < -(totalSlides - 1) * 12.5) return;
+            
             carrossel.style.transform = `translateX(${offset}%)`;
-        }, { passive: true });
+        });
 
-        carrossel.addEventListener('touchend', () => {
-            carrossel.style.transition = 'transform 0.5s ease-in-out';
+        carrossel.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (!touchStartX) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
             const diff = touchEndX - touchStartX;
-            const threshold = carrossel.offsetWidth * 0.2;
-
+            const threshold = carrossel.offsetWidth * 0.5;
+            
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
                     slideAnterior();
@@ -815,28 +945,36 @@
             } else {
                 atualizarCarrossel();
             }
+            
+            touchStartX = null;
         });
 
         // Eventos de mouse para desktop
         carrossel.addEventListener('mousedown', (e) => {
+            e.preventDefault();
             startX = e.clientX;
             carrossel.style.transition = 'none';
-            pararCarrosselAutomatico();
+            isDragging = true;
         });
 
         carrossel.addEventListener('mousemove', (e) => {
-            if (startX === null) return;
+            if (!isDragging || startX === null) return;
+            
             moveX = e.clientX;
             const diff = moveX - startX;
             const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
+            
+            // Limita o deslizamento
+            if (offset > 0 || offset < -(totalSlides - 1) * 12.5) return;
+            
             carrossel.style.transform = `translateX(${offset}%)`;
         });
 
-        carrossel.addEventListener('mouseup', () => {
-            if (startX === null) return;
-            carrossel.style.transition = 'transform 0.5s ease-in-out';
+        carrossel.addEventListener('mouseup', (e) => {
+            if (!isDragging || startX === null) return;
+            
             const diff = moveX - startX;
-            const threshold = carrossel.offsetWidth * 0.2;
+            const threshold = carrossel.offsetWidth * 0.5;
 
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
@@ -847,14 +985,18 @@
             } else {
                 atualizarCarrossel();
             }
+            
             startX = null;
+            moveX = null;
+            isDragging = false;
         });
 
         carrossel.addEventListener('mouseleave', () => {
-            if (startX !== null) {
-                carrossel.style.transition = 'transform 0.5s ease-in-out';
+            if (isDragging) {
                 atualizarCarrossel();
                 startX = null;
+                moveX = null;
+                isDragging = false;
             }
         });
 
@@ -863,61 +1005,80 @@
             botao.addEventListener('click', () => {
                 slideAtual = index;
                 atualizarCarrossel();
-                pararCarrosselAutomatico();
             });
         });
 
-        // Inicia o carrossel automático
-        iniciarCarrosselAutomatico();
+        // Adiciona eventos às setas de navegação
+        const setaAnterior = document.getElementById('setaAnterior');
+        const setaProximo = document.getElementById('setaProximo');
 
-        // Pausa a troca automática quando o usuário interage
-        carrossel.addEventListener('mouseenter', pararCarrosselAutomatico);
-        carrossel.addEventListener('mouseleave', () => {
-            if (carrosselAutomaticoAtivo) {
-                iniciarCarrosselAutomatico();
+        function atualizarSetas() {
+            setaAnterior.classList.toggle('desabilitada', slideAtual === 0);
+            setaProximo.classList.toggle('desabilitada', slideAtual === totalSlides - 1);
+        }
+
+        setaAnterior.addEventListener('click', () => {
+            if (slideAtual > 0) {
+                slideAnterior();
             }
         });
 
-        // Substituir o código JavaScript das partículas
+        setaProximo.addEventListener('click', () => {
+            if (slideAtual < totalSlides - 1) {
+                proximoSlide();
+            }
+        });
+
+        // Atualiza as setas quando o carrossel é atualizado
+        const atualizarCarrosselOriginal = atualizarCarrossel;
+        atualizarCarrossel = function() {
+            atualizarCarrosselOriginal();
+            atualizarSetas();
+        };
+
+        // Inicializa o carrossel e as setas
+        atualizarCarrossel();
+        atualizarSetas();
+
+        // Código das partículas
         function criarParticula() {
+            const particulas = document.getElementById('particulas');
             const particula = document.createElement('div');
             particula.className = 'particula';
             
-            // Tamanho aleatório entre 5px e 12px
-            const tamanho = Math.random() * 7 + 5;
+            // Posição inicial aleatória
+            const posicaoX = Math.random() * 100;
+            const posicaoY = Math.random() * 100;
+            particula.style.left = `${posicaoX}%`;
+            particula.style.top = `${posicaoY}%`;
+            
+            // Tamanho aleatório
+            const tamanho = Math.random() * 2 + 1;
             particula.style.width = `${tamanho}px`;
             particula.style.height = `${tamanho}px`;
             
-            // Posição inicial aleatória
-            particula.style.left = `${Math.random() * 100}vw`;
-            particula.style.top = `${Math.random() * 100}vh`;
+            // Duração da animação aleatória
+            const duracao = Math.random() * 10 + 15;
+            particula.style.animationDuration = `${duracao}s`;
             
-            // Duração da animação entre 8s e 15s
-            const duracaoAnimacao = Math.random() * 7 + 8;
-            particula.style.animationDuration = `${duracaoAnimacao}s`;
+            // Atraso inicial aleatório
+            const atraso = Math.random() * 5;
+            particula.style.animationDelay = `${atraso}s`;
             
-            // Atraso inicial aleatório entre 0s e 5s
-            const atrasoAnimacao = Math.random() * 5;
-            particula.style.animationDelay = `${atrasoAnimacao}s`;
+            particulas.appendChild(particula);
             
-            // Adiciona propriedades CSS personalizadas para movimento lateral e rotação
-            particula.style.setProperty('--random-x', (Math.random() - 0.5) * 200); // Movimento lateral aleatório entre -100vw e 100vw
-            particula.style.setProperty('--random-rotation', (Math.random() - 0.5) * 720); // Rotação aleatória entre -360deg e 360deg
-
-            document.body.appendChild(particula);
-
             // Remove a partícula após a animação
             setTimeout(() => {
                 particula.remove();
-            }, (duracaoAnimacao + atrasoAnimacao) * 1000 + 50); // Remove após a animação terminar com uma pequena margem
+            }, (duracao + atraso) * 1000);
         }
 
         // Criar partículas periodicamente
-        setInterval(criarParticula, 150);
+        setInterval(criarParticula, 200);
 
-        // Criar mais partículas iniciais
-        for(let i = 0; i < 50; i++) {
-            setTimeout(criarParticula, i * 80);
+        // Criar partículas iniciais
+        for(let i = 0; i < 20; i++) {
+            setTimeout(criarParticula, i * 100);
         }
 
         // Garante que a música comece a tocar
@@ -927,11 +1088,6 @@
                 console.log("Erro ao tocar música automaticamente:", error);
             });
         });
-
-        // Remover código JavaScript da luz
-        function criarLuzSol() {
-            // Função vazia para não causar erros
-        }
     </script>
 </body>
 </html> 
