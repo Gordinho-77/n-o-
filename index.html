@@ -186,41 +186,43 @@
         /* Estilos do título */
         .titulo {
             color: var(--cor-texto);
-            font-size: clamp(24px, 4vw, 42px);
+            font-size: clamp(20px, 5vw, 42px);
             text-shadow: var(--sombra-texto);
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: clamp(10px, 2vw, 25px);
+            padding: clamp(8px, 2vw, 25px);
             text-transform: uppercase;
-            letter-spacing: clamp(0.5px, 0.3vw, 2px);
+            letter-spacing: clamp(0.3px, 0.2vw, 2px);
             width: 100%;
             max-width: min(800px, 95vw);
             text-align: center;
             margin-bottom: clamp(10px, 2vw, 25px);
             word-wrap: break-word;
-            gap: 10px;
+            gap: clamp(5px, 1vw, 10px);
             font-family: 'Playfair Display', serif;
         }
 
         .linha-titulo {
-            display: inline-flex;
+            display: flex;
             justify-content: center;
             align-items: center;
             margin: 0;
-            white-space: nowrap;
+            flex-wrap: wrap;
+            gap: clamp(2px, 0.5vw, 8px);
         }
 
         .titulo span {
             display: inline-block;
             transition: transform 0.3s ease;
             text-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+            font-size: clamp(18px, 4vw, 42px);
         }
 
         .espaco {
-            margin: 0 8px;
+            margin: 0 clamp(2px, 0.5vw, 8px);
         }
 
         .palavra {
@@ -231,6 +233,47 @@
         .titulo span:hover {
             transform: translateY(-3px);
             text-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+        }
+
+        /* Media Queries para o título */
+        @media screen and (max-width: 480px) {
+            .titulo {
+                font-size: clamp(16px, 4vw, 24px);
+                padding: 8px 5px;
+                gap: 4px;
+            }
+
+            .linha-titulo {
+                gap: 2px;
+            }
+
+            .titulo span {
+                font-size: clamp(16px, 4vw, 24px);
+            }
+
+            .espaco {
+                margin: 0 2px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .titulo {
+                font-size: clamp(14px, 3.5vw, 20px);
+                padding: 6px 3px;
+                gap: 3px;
+            }
+
+            .linha-titulo {
+                gap: 1px;
+            }
+
+            .titulo span {
+                font-size: clamp(14px, 3.5vw, 20px);
+            }
+
+            .espaco {
+                margin: 0 1px;
+            }
         }
 
         /* Container da música */
@@ -579,56 +622,6 @@
             }
         }
 
-        @media screen and (max-width: 480px) {
-            .container {
-                gap: 15px;
-                padding: 10px;
-            }
-
-            .carrossel-container {
-                width: min(280px, 90vw);
-                height: min(480px, 160vw);
-            }
-
-            .area-texto {
-                width: min(320px, 95vw);
-                padding: 15px;
-                font-size: 13px;
-                line-height: 1.5;
-            }
-
-            .area-texto p {
-                margin-bottom: 12px;
-                padding: 0 5px;
-            }
-
-            .carrossel-botoes {
-                bottom: 10px;
-                padding: 8px 14px;
-            }
-
-            .carrossel-botao {
-                width: 8px;
-                height: 8px;
-            }
-
-            .titulo {
-                font-size: 16px;
-                letter-spacing: 0.5px;
-                padding: 10px 5px;
-            }
-
-            .seta-navegacao {
-                width: 35px;
-                height: 35px;
-            }
-
-            .seta-navegacao::before {
-                width: 10px;
-                height: 10px;
-            }
-        }
-
         @media screen and (min-width: 1200px) {
             .container {
                 gap: 40px;
@@ -880,9 +873,7 @@
         const botoes = document.querySelectorAll('.carrossel-botao');
         let slideAtual = 0;
         const totalSlides = botoes.length;
-        let startX = null;
-        let moveX = null;
-        let isDragging = false;
+        let touchStartX = null;
 
         function atualizarCarrossel() {
             const offset = slideAtual * 12.5;
@@ -947,57 +938,6 @@
             }
             
             touchStartX = null;
-        });
-
-        // Eventos de mouse para desktop
-        carrossel.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            startX = e.clientX;
-            carrossel.style.transition = 'none';
-            isDragging = true;
-        });
-
-        carrossel.addEventListener('mousemove', (e) => {
-            if (!isDragging || startX === null) return;
-            
-            moveX = e.clientX;
-            const diff = moveX - startX;
-            const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
-            
-            // Limita o deslizamento
-            if (offset > 0 || offset < -(totalSlides - 1) * 12.5) return;
-            
-            carrossel.style.transform = `translateX(${offset}%)`;
-        });
-
-        carrossel.addEventListener('mouseup', (e) => {
-            if (!isDragging || startX === null) return;
-            
-            const diff = moveX - startX;
-            const threshold = carrossel.offsetWidth * 0.5;
-
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    slideAnterior();
-                } else {
-                    proximoSlide();
-                }
-            } else {
-                atualizarCarrossel();
-            }
-            
-            startX = null;
-            moveX = null;
-            isDragging = false;
-        });
-
-        carrossel.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                atualizarCarrossel();
-                startX = null;
-                moveX = null;
-                isDragging = false;
-            }
         });
 
         // Adiciona eventos aos botões
