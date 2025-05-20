@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>não é um adeus</title>
+    <style>
+        :root {
+            /* Cores principais */
+            --cor-violeta-claro: #8A2BE2;
+            --cor-violeta-medio: #9370DB;
+            --cor-violeta-escuro: #4B0082;
+            --cor-violeta-muito-escuro: #2E0854;
+            --cor-verde-claro: #00FF7F;
+            --cor-verde-medio: #32CD32;
+            --cor-verde-escuro: #006400;
+            --cor-texto: #ffffff;
+            --cor-texto-gradiente: linear-gradient(45deg, #fff, #e6e6e6);
+
+            /* Sombras */
+            --sombra-padrao: 0 0 20px rgba(0, 0, 0, 0.5);
+            --sombra-texto: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            --sombra-hover: 0 0 30px rgba(138, 43, 226, 0.6);
+
+            /* Animações */
+            --duracao-animacao: 3s;
+            --timing-animacao: ease-in-out;
+        }
+
+        /* Reset e estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, var(--cor-violeta-escuro), var(--cor-violeta-muito-escuro));
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 0% 0%, 
+                    var(--cor-verde-claro) 0%,
+                    transparent 50%),
+                radial-gradient(circle at 100% 100%, 
+                    var(--cor-violeta-claro) 0%,
+                    transparent 50%);
+            opacity: 0.3;
+            animation: fundo-pulsar 10s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg,
+                    var(--cor-violeta-escuro) 0%,
+                    var(--cor-verde-escuro) 50%,
+                    var(--cor-violeta-muito-escuro) 100%);
+            opacity: 0.7;
+            z-index: -1;
+            animation: fundo-gradiente 15s ease infinite;
+        }
+
+        @keyframes fundo-pulsar {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes fundo-gradiente {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Container principal */
+        .container {
+            text-align: center;
+            perspective: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(20px, 5vw, 40px);
+            padding: clamp(15px, 3vw, 30px);
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: auto;
+            justify-content: flex-start;
+        }
+
+        /* Estilos da imagem */
+        .imagem-animada {
+            width: 270px;
+            height: 480px;
+            border: 8px solid;
+            border-image: linear-gradient(45deg, var(--cor-violeta-claro), var(--cor-violeta-medio), var(--cor-violeta-claro)) 1;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.8),
+                        inset 0 0 30px rgba(138, 43, 226, 0.4),
+                        0 0 50px rgba(138, 43, 226, 0.6);
+            animation: pulsar var(--duracao-animacao) infinite var(--timing-animacao);
+            transition: all 0.3s ease;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        .imagem-animada:hover {
+            transform: scale(1.05);
+            box-shadow: var(--sombra-hover),
+                        inset 0 0 30px rgba(138, 43, 226, 0.4);
+            border-image: linear-gradient(45deg, var(--cor-violeta-medio), var(--cor-violeta-claro), var(--cor-violeta-medio)) 1;
+        }
+
+        /* Animações */
+        @keyframes pulsar {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: scale(1.05);
+                filter: brightness(1.1);
+            }
+            100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        /* Estilos do título */
+        .titulo {
+            color: var(--cor-texto);
+            font-size: clamp(18px, 3.5vw, 32px);
+            text-shadow: var(--sombra-texto);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(10px, 2vw, 25px);
+            text-transform: uppercase;
+            letter-spacing: clamp(0.5px, 0.3vw, 2px);
+            background: var(--cor-texto-gradiente);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            width: 100%;
+            max-width: min(800px, 95vw);
+            text-align: center;
+            margin-bottom: clamp(10px, 2vw, 25px);
+            word-wrap: break-word;
+            gap: 10px;
+        }
+
+        .linha-titulo {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .titulo span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+        }
+
+        .espaco {
+            margin: 0 8px;
+        }
+
+        .palavra {
+            margin: 0;
+            padding: 0;
+        }
+
+        .titulo span:hover {
+            transform: translateY(-3px);
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+        }
+
+        /* Container da música */
+        .musica-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Estilos da área de texto */
+        .area-texto {
+            width: min(450px, 95vw);
+            min-height: fit-content;
+            max-height: none;
+            padding: clamp(15px, 3vw, 35px);
+            background: rgba(255, 255, 255, 0.03);
+            border: none;
+            border-radius: clamp(15px, 3vw, 25px);
+            color: var(--cor-texto);
+            font-size: clamp(13px, 2.2vw, 16px);
+            line-height: 1.6;
+            position: relative;
+            margin: 0 auto;
+            overflow: visible;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .area-texto::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(120deg, transparent 0%, rgba(138, 43, 226, 0.1) 50%, transparent 100%),
+                linear-gradient(60deg, transparent 0%, rgba(147, 112, 219, 0.1) 50%, transparent 100%);
+            animation: brilho 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .area-texto::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, 
+                var(--cor-violeta-claro),
+                var(--cor-violeta-medio),
+                var(--cor-violeta-escuro),
+                var(--cor-violeta-medio),
+                var(--cor-violeta-claro));
+            background-size: 400% 400%;
+            animation: gradiente 15s ease infinite;
+            z-index: -2;
+            border-radius: 22px;
+            filter: blur(8px);
+            opacity: 0.5;
+        }
+
+        .area-texto p {
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+            letter-spacing: 0.3px;
+            font-weight: 300;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .area-texto p:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes brilho {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes gradiente {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Estilização da barra de rolagem */
+        .area-texto::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .area-texto::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin: 5px;
+        }
+
+        .area-texto::-webkit-scrollbar-thumb {
+            background: var(--cor-violeta-claro);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .area-texto::-webkit-scrollbar-thumb:hover {
+            background: var(--cor-violeta-medio);
+        }
+
+        /* Estilos das partículas */
+        .particula {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at center, 
+                rgba(138, 43, 226, 1) 0%,
+                rgba(147, 112, 219, 0.8) 40%,
+                rgba(75, 0, 130, 0.6) 70%,
+                transparent 100%);
+            border-radius: 50%;
+            animation: flutuar linear infinite;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.6),
+                       0 0 20px rgba(138, 43, 226, 0.4),
+                       0 0 30px rgba(138, 43, 226, 0.2);
+        }
+
+        @keyframes flutuar {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Estilos do carrossel */
+        .carrossel-container {
+            width: min(350px, 90vw);
+            height: min(580px, 160vw);
+            position: relative;
+            overflow: hidden;
+            border-radius: clamp(15px, 3vw, 25px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+            transition: all 0.5s ease;
+            margin: 0 auto;
+        }
+
+        .carrossel-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(120deg, transparent 0%, rgba(138, 43, 226, 0.1) 50%, transparent 100%),
+                linear-gradient(60deg, transparent 0%, rgba(147, 112, 219, 0.1) 50%, transparent 100%);
+            animation: brilho 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .carrossel {
+            display: flex;
+            width: 800%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            width: 12.5%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(0, 0, 0, 0.2) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            filter: brightness(0.95);
+        }
+
+        .slide:hover img {
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+
+        .carrossel-botoes {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .carrossel-botao {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carrossel-botao::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, 
+                var(--cor-violeta-claro),
+                var(--cor-violeta-medio));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carrossel-botao.ativo {
+            background: transparent;
+            transform: scale(1.2);
+        }
+
+        .carrossel-botao.ativo::before {
+            opacity: 1;
+        }
+
+        .carrossel-botao:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .container {
+                gap: 25px;
+                padding: 20px;
+            }
+
+            .carrossel-container {
+                width: min(300px, 85vw);
+                height: min(500px, 150vw);
+            }
+
+            .area-texto {
+                width: min(400px, 85vw);
+                padding: 25px;
+            }
+
+            .carrossel-botoes {
+                bottom: 15px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                gap: 15px;
+                padding: 10px;
+            }
+
+            .carrossel-container {
+                width: min(280px, 90vw);
+                height: min(480px, 160vw);
+            }
+
+            .area-texto {
+                width: min(320px, 95vw);
+                padding: 15px;
+                font-size: 13px;
+                line-height: 1.5;
+            }
+
+            .area-texto p {
+                margin-bottom: 12px;
+                padding: 0 5px;
+            }
+
+            .carrossel-botoes {
+                bottom: 10px;
+                padding: 8px 14px;
+            }
+
+            .carrossel-botao {
+                width: 8px;
+                height: 8px;
+            }
+
+            .titulo {
+                font-size: 16px;
+                letter-spacing: 0.5px;
+                padding: 10px 5px;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .container {
+                gap: 40px;
+                padding: 30px;
+            }
+
+            .carrossel-container {
+                width: 350px;
+                height: 580px;
+            }
+
+            .area-texto {
+                width: 450px;
+                padding: 35px;
+            }
+
+            .carrossel-botoes {
+                bottom: 25px;
+                padding: 14px 24px;
+            }
+        }
+
+        /* Ajuste para telas muito pequenas */
+        @media screen and (max-width: 320px) {
+            .container {
+                gap: 10px;
+                padding: 8px;
+            }
+
+            .titulo {
+                font-size: 14px;
+                letter-spacing: 0.3px;
+                padding: 8px 3px;
+            }
+
+            .carrossel-container {
+                width: 280px;
+                height: 440px;
+            }
+
+            .area-texto {
+                width: 280px;
+                padding: 12px;
+                font-size: 12px;
+            }
+
+            .area-texto p {
+                margin-bottom: 10px;
+                padding: 0 3px;
+            }
+        }
+
+        /* Ajuste para telas muito grandes */
+        @media screen and (min-width: 1600px) {
+            .container {
+                max-width: 1400px;
+            }
+
+            .carrossel-container {
+                width: 400px;
+                height: 650px;
+            }
+
+            .area-texto {
+                width: 500px;
+                padding: 40px;
+                font-size: 18px;
+            }
+        }
+
+        /* Remover efeito de luz amarela */
+        .luz-sol {
+            display: none;
+        }
+
+        /* Restaurar estilos originais do carrossel */
+        .carrossel-container {
+            width: min(350px, 90vw);
+            height: min(580px, 160vw);
+            position: relative;
+            overflow: hidden;
+            border-radius: clamp(15px, 3vw, 25px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+            transition: all 0.5s ease;
+            margin: 0 auto;
+        }
+
+        .carrossel-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(120deg, transparent 0%, rgba(138, 43, 226, 0.1) 50%, transparent 100%),
+                linear-gradient(60deg, transparent 0%, rgba(147, 112, 219, 0.1) 50%, transparent 100%);
+            animation: brilho 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            filter: brightness(0.95);
+        }
+
+        .slide:hover img {
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="titulo">
+            <div class="linha-titulo">
+                <span>P</span>
+                <span>a</span>
+                <span>r</span>
+                <span>a</span>
+                <span class="espaco">&nbsp;</span>
+                <span>S</span>
+                <span>e</span>
+                <span>m</span>
+                <span>p</span>
+                <span>r</span>
+                <span>e</span>
+            </div>
+            <div class="linha-titulo">
+                <span>S</span>
+                <span>e</span>
+                <span>u</span>
+                <span class="espaco">&nbsp;</span>
+                <span class="palavra">A</span>
+                <span class="palavra">m</span>
+                <span class="palavra">i</span>
+                <span class="palavra">g</span>
+                <span class="palavra">o</span>
+                <span>!</span>
+            </div>
+        </h1>
+        <div class="carrossel-container">
+            <div class="carrossel">
+                <div class="slide">
+                    <img src="foto1.jpg" alt="Foto 1">
+                </div>
+                <div class="slide">
+                    <img src="foto2.jpg" alt="Foto 2">
+                </div>
+                <div class="slide">
+                    <img src="foto3.jpg" alt="Foto 3">
+                </div>
+                <div class="slide">
+                    <img src="foto4.png" alt="Foto 4">
+                </div>
+                <div class="slide">
+                    <img src="foto5.jpg" alt="Foto 5">
+                </div>
+                <div class="slide">
+                    <img src="foto6.jpg" alt="Foto 6">
+                </div>
+                <div class="slide">
+                    <img src="foto7.jpg" alt="Foto 7">
+                </div>
+                <div class="slide">
+                    <img src="foto8.jpg" alt="Foto 8">
+                </div>
+            </div>
+            <div class="carrossel-botoes">
+                <button class="carrossel-botao ativo"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+                <button class="carrossel-botao"></button>
+            </div>
+        </div>
+        <div class="area-texto">
+            <p>Desde outubro de 2022 para sempre guardar no coração cada lembrança, riso e momentos vividos juntos.</p>
+            <p>"Algumas conexões o tempo não apaga e a distância não enfraquece"</p>
+            <p>Eu lhe desejo tudo de bom nessa vida e saiba que você tem minha eterna admiração</p>
+            <p>Para Sempre: Elyelton Afonso.</p>
+        </div>
+    </div>
+
+    <div class="musica-container">
+        <audio autoplay loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        // Código do carrossel
+        const carrossel = document.querySelector('.carrossel');
+        const botoes = document.querySelectorAll('.carrossel-botao');
+        let slideAtual = 0;
+        const totalSlides = botoes.length;
+        let startX, moveX;
+        let isDragging = false;
+        let intervaloAutomatico = null;
+        let carrosselAutomaticoAtivo = true;
+
+        function atualizarCarrossel() {
+            carrossel.style.transform = `translateX(-${slideAtual * 12.5}%)`;
+            botoes.forEach((botao, index) => {
+                botao.classList.toggle('ativo', index === slideAtual);
+            });
+        }
+
+        function proximoSlide() {
+            if (!carrosselAutomaticoAtivo) return;
+            slideAtual = (slideAtual + 1) % totalSlides;
+            atualizarCarrossel();
+        }
+
+        function slideAnterior() {
+            slideAtual = (slideAtual - 1 + totalSlides) % totalSlides;
+            atualizarCarrossel();
+        }
+
+        function iniciarCarrosselAutomatico() {
+            if (!carrosselAutomaticoAtivo) return;
+            if (intervaloAutomatico) clearInterval(intervaloAutomatico);
+            intervaloAutomatico = setInterval(proximoSlide, 5000);
+        }
+
+        function pararCarrosselAutomatico() {
+            carrosselAutomaticoAtivo = false;
+            if (intervaloAutomatico) {
+                clearInterval(intervaloAutomatico);
+                intervaloAutomatico = null;
+            }
+        }
+
+        // Eventos de toque e mouse para arrastar
+        carrossel.addEventListener('mousedown', iniciarArrasto);
+        carrossel.addEventListener('touchstart', iniciarArrasto);
+
+        carrossel.addEventListener('mousemove', arrastar);
+        carrossel.addEventListener('touchmove', arrastar);
+
+        carrossel.addEventListener('mouseup', finalizarArrasto);
+        carrossel.addEventListener('touchend', finalizarArrasto);
+        carrossel.addEventListener('mouseleave', finalizarArrasto);
+
+        function iniciarArrasto(e) {
+            isDragging = true;
+            startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+            carrossel.style.transition = 'none';
+            pararCarrosselAutomatico();
+        }
+
+        function arrastar(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            moveX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+            const diff = moveX - startX;
+            const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
+            carrossel.style.transform = `translateX(${offset}%)`;
+        }
+
+        function finalizarArrasto(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            carrossel.style.transition = 'transform 0.5s ease-in-out';
+            
+            const diff = moveX - startX;
+            const threshold = carrossel.offsetWidth * 0.2;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    slideAnterior();
+                } else {
+                    proximoSlide();
+                }
+            } else {
+                atualizarCarrossel();
+            }
+        }
+
+        // Adiciona eventos aos botões
+        botoes.forEach((botao, index) => {
+            botao.addEventListener('click', () => {
+                slideAtual = index;
+                atualizarCarrossel();
+                pararCarrosselAutomatico();
+            });
+        });
+
+        // Inicia o carrossel automático
+        iniciarCarrosselAutomatico();
+
+        // Pausa a troca automática quando o usuário interage
+        carrossel.addEventListener('mouseenter', pararCarrosselAutomatico);
+        carrossel.addEventListener('mouseleave', () => {
+            if (carrosselAutomaticoAtivo) {
+                iniciarCarrosselAutomatico();
+            }
+        });
+
+        // Substituir o código JavaScript das partículas
+        function criarParticula() {
+            const particula = document.createElement('div');
+            particula.className = 'particula';
+            
+            // Tamanho aleatório entre 4px e 10px
+            const tamanho = Math.random() * 6 + 4;
+            particula.style.width = `${tamanho}px`;
+            particula.style.height = `${tamanho}px`;
+            
+            // Posição inicial aleatória
+            particula.style.left = `${Math.random() * 100}vw`;
+            particula.style.top = `${Math.random() * 100}vh`;
+            
+            // Duração da animação entre 6s e 12s
+            particula.style.animationDuration = `${Math.random() * 6 + 6}s`;
+            
+            // Atraso inicial aleatório
+            particula.style.animationDelay = `${Math.random() * 3}s`;
+            
+            document.body.appendChild(particula);
+
+            // Remove a partícula após a animação
+            setTimeout(() => {
+                particula.remove();
+            }, 12000);
+        }
+
+        // Criar partículas periodicamente
+        setInterval(criarParticula, 200);
+
+        // Criar mais partículas iniciais
+        for(let i = 0; i < 30; i++) {
+            setTimeout(criarParticula, i * 100);
+        }
+
+        // Garante que a música comece a tocar
+        window.addEventListener('load', function() {
+            const audio = document.querySelector('audio');
+            audio.play().catch(function(error) {
+                console.log("Erro ao tocar música automaticamente:", error);
+            });
+        });
+
+        // Remover código JavaScript da luz
+        function criarLuzSol() {
+            // Função vazia para não causar erros
+        }
+    </script>
+</body>
+</html> 
