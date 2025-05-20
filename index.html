@@ -509,6 +509,11 @@
             height: 100%;
             transition: transform 0.5s ease-in-out;
             will-change: transform;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            touch-action: pan-y pinch-zoom;
         }
 
         .slide {
@@ -518,6 +523,7 @@
             position: relative;
             overflow: hidden;
             border-radius: 20px;
+            pointer-events: none;
         }
 
         .slide::before {
@@ -539,6 +545,8 @@
             transition: transform 0.5s ease;
             filter: brightness(0.95);
             pointer-events: none;
+            user-drag: none;
+            -webkit-user-drag: none;
         }
 
         .slide:hover img {
@@ -887,14 +895,14 @@
         function proximoSlide() {
             if (slideAtual < totalSlides - 1) {
                 slideAtual++;
-            atualizarCarrossel();
+                atualizarCarrossel();
             }
         }
 
         function slideAnterior() {
             if (slideAtual > 0) {
                 slideAtual--;
-            atualizarCarrossel();
+                atualizarCarrossel();
             }
         }
 
