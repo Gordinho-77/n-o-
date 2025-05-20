@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>não é um adeus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Cores principais */
@@ -164,7 +165,7 @@
         /* Estilos do título */
         .titulo {
             color: var(--cor-texto);
-            font-size: clamp(18px, 3.5vw, 32px);
+            font-size: clamp(24px, 4vw, 42px);
             text-shadow: var(--sombra-texto);
             position: relative;
             display: flex;
@@ -174,15 +175,13 @@
             padding: clamp(10px, 2vw, 25px);
             text-transform: uppercase;
             letter-spacing: clamp(0.5px, 0.3vw, 2px);
-            background: var(--cor-texto-gradiente);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             width: 100%;
             max-width: min(800px, 95vw);
             text-align: center;
             margin-bottom: clamp(10px, 2vw, 25px);
             word-wrap: break-word;
             gap: 10px;
+            font-family: 'Playfair Display', serif;
         }
 
         .linha-titulo {
@@ -228,7 +227,7 @@
             max-height: none;
             padding: clamp(15px, 3vw, 35px);
             background: rgba(255, 255, 255, 0.03);
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: clamp(15px, 3vw, 25px);
             color: var(--cor-texto);
             font-size: clamp(13px, 2.2vw, 16px);
@@ -255,7 +254,7 @@
             content: '';
             position: absolute;
             inset: -2px;
-            background: linear-gradient(45deg, 
+            background: linear-gradient(45deg,
                 var(--cor-violeta-claro),
                 var(--cor-violeta-medio),
                 var(--cor-violeta-escuro),
@@ -266,7 +265,7 @@
             z-index: -2;
             border-radius: 22px;
             filter: blur(8px);
-            opacity: 0.5;
+            opacity: 0.8;
         }
 
         .area-texto p {
@@ -334,31 +333,31 @@
             position: fixed;
             pointer-events: none;
             z-index: 0;
-            background: radial-gradient(circle at center, 
+            background: radial-gradient(circle at center,
                 rgba(138, 43, 226, 1) 0%,
                 rgba(147, 112, 219, 0.8) 40%,
                 rgba(75, 0, 130, 0.6) 70%,
                 transparent 100%);
             border-radius: 50%;
             animation: flutuar linear infinite;
-            box-shadow: 0 0 10px rgba(138, 43, 226, 0.6),
-                       0 0 20px rgba(138, 43, 226, 0.4),
-                       0 0 30px rgba(138, 43, 226, 0.2);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.8),
+                       0 0 30px rgba(138, 43, 226, 0.6),
+                       0 0 50px rgba(138, 43, 226, 0.4);
         }
 
         @keyframes flutuar {
             0% {
-                transform: translateY(0) translateX(0) scale(1);
+                transform: translateY(0) translateX(0vw) scale(1) rotate(0deg);
                 opacity: 0;
             }
-            20% {
+            10% {
                 opacity: 1;
             }
-            80% {
+            90% {
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh) translateX(100px) scale(0);
+                transform: translateY(-100vh) translateX(calc(var(--random-x, 0) * 1vw)) scale(0) rotate(calc(var(--random-rotation, 0) * 1deg));
                 opacity: 0;
             }
         }
@@ -753,6 +752,8 @@
         let isDragging = false;
         let intervaloAutomatico = null;
         let carrosselAutomaticoAtivo = true;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
         function atualizarCarrossel() {
             carrossel.style.transform = `translateX(-${slideAtual * 12.5}%)`;
@@ -786,38 +787,54 @@
             }
         }
 
-        // Eventos de toque e mouse para arrastar
-        carrossel.addEventListener('mousedown', iniciarArrasto);
-        carrossel.addEventListener('touchstart', iniciarArrasto);
-
-        carrossel.addEventListener('mousemove', arrastar);
-        carrossel.addEventListener('touchmove', arrastar);
-
-        carrossel.addEventListener('mouseup', finalizarArrasto);
-        carrossel.addEventListener('touchend', finalizarArrasto);
-        carrossel.addEventListener('mouseleave', finalizarArrasto);
-
-        function iniciarArrasto(e) {
-            isDragging = true;
-            startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+        // Eventos de toque para dispositivos móveis
+        carrossel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
             carrossel.style.transition = 'none';
             pararCarrosselAutomatico();
-        }
+        }, { passive: true });
 
-        function arrastar(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            moveX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+        carrossel.addEventListener('touchmove', (e) => {
+            touchEndX = e.touches[0].clientX;
+            const diff = touchEndX - touchStartX;
+            const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
+            carrossel.style.transform = `translateX(${offset}%)`;
+        }, { passive: true });
+
+        carrossel.addEventListener('touchend', () => {
+            carrossel.style.transition = 'transform 0.5s ease-in-out';
+            const diff = touchEndX - touchStartX;
+            const threshold = carrossel.offsetWidth * 0.2;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    slideAnterior();
+                } else {
+                    proximoSlide();
+                }
+            } else {
+                atualizarCarrossel();
+            }
+        });
+
+        // Eventos de mouse para desktop
+        carrossel.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            carrossel.style.transition = 'none';
+            pararCarrosselAutomatico();
+        });
+
+        carrossel.addEventListener('mousemove', (e) => {
+            if (startX === null) return;
+            moveX = e.clientX;
             const diff = moveX - startX;
             const offset = -slideAtual * 12.5 + (diff / carrossel.offsetWidth * 100);
             carrossel.style.transform = `translateX(${offset}%)`;
-        }
+        });
 
-        function finalizarArrasto(e) {
-            if (!isDragging) return;
-            isDragging = false;
+        carrossel.addEventListener('mouseup', () => {
+            if (startX === null) return;
             carrossel.style.transition = 'transform 0.5s ease-in-out';
-            
             const diff = moveX - startX;
             const threshold = carrossel.offsetWidth * 0.2;
 
@@ -830,7 +847,16 @@
             } else {
                 atualizarCarrossel();
             }
-        }
+            startX = null;
+        });
+
+        carrossel.addEventListener('mouseleave', () => {
+            if (startX !== null) {
+                carrossel.style.transition = 'transform 0.5s ease-in-out';
+                atualizarCarrossel();
+                startX = null;
+            }
+        });
 
         // Adiciona eventos aos botões
         botoes.forEach((botao, index) => {
@@ -857,8 +883,8 @@
             const particula = document.createElement('div');
             particula.className = 'particula';
             
-            // Tamanho aleatório entre 4px e 10px
-            const tamanho = Math.random() * 6 + 4;
+            // Tamanho aleatório entre 5px e 12px
+            const tamanho = Math.random() * 7 + 5;
             particula.style.width = `${tamanho}px`;
             particula.style.height = `${tamanho}px`;
             
@@ -866,26 +892,32 @@
             particula.style.left = `${Math.random() * 100}vw`;
             particula.style.top = `${Math.random() * 100}vh`;
             
-            // Duração da animação entre 6s e 12s
-            particula.style.animationDuration = `${Math.random() * 6 + 6}s`;
+            // Duração da animação entre 8s e 15s
+            const duracaoAnimacao = Math.random() * 7 + 8;
+            particula.style.animationDuration = `${duracaoAnimacao}s`;
             
-            // Atraso inicial aleatório
-            particula.style.animationDelay = `${Math.random() * 3}s`;
+            // Atraso inicial aleatório entre 0s e 5s
+            const atrasoAnimacao = Math.random() * 5;
+            particula.style.animationDelay = `${atrasoAnimacao}s`;
             
+            // Adiciona propriedades CSS personalizadas para movimento lateral e rotação
+            particula.style.setProperty('--random-x', (Math.random() - 0.5) * 200); // Movimento lateral aleatório entre -100vw e 100vw
+            particula.style.setProperty('--random-rotation', (Math.random() - 0.5) * 720); // Rotação aleatória entre -360deg e 360deg
+
             document.body.appendChild(particula);
 
             // Remove a partícula após a animação
             setTimeout(() => {
                 particula.remove();
-            }, 12000);
+            }, (duracaoAnimacao + atrasoAnimacao) * 1000 + 50); // Remove após a animação terminar com uma pequena margem
         }
 
         // Criar partículas periodicamente
-        setInterval(criarParticula, 200);
+        setInterval(criarParticula, 150);
 
         // Criar mais partículas iniciais
-        for(let i = 0; i < 30; i++) {
-            setTimeout(criarParticula, i * 100);
+        for(let i = 0; i < 50; i++) {
+            setTimeout(criarParticula, i * 80);
         }
 
         // Garante que a música comece a tocar
